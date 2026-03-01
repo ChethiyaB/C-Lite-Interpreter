@@ -27,8 +27,8 @@ assignment      = identifier "=" expression ";" ;
 if_statement    = "if" "(" expression ")" statement
                 [ "else" statement ] ;
 
-(* Block introduces new scope for variable lifetime management *)
-block           = "{" { statement } "}" ;
+(* Block introduces new scope - allows declarations inside *)
+block           = "{" { declaration | statement } "}" ;
 
 (* Built-in printf() function for output (Project Spec §3) *)
 printf_call     = "printf" "(" expression ")" ";" ;

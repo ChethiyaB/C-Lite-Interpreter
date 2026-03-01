@@ -1,5 +1,5 @@
 """
-Custom exception hierarchy for C-Lite lexical and syntax errors.
+Custom exception hierarchy for C-Lite interpreter errors.
 """
 
 class CLiteError(Exception):
@@ -17,9 +17,21 @@ class LexerError(CLiteError):
         super().__init__(f"LexerError at line {line}, column {column}: {message}")
 
 class ParserError(CLiteError):
-    """Raised when the parser encounters invalid syntax."""
-    pass
+    """
+    Raised when the parser encounters invalid syntax.
+    Includes source location for precise error reporting.
+    """
+    def __init__(self, message: str, line: int, column: int):
+        self.line = line
+        self.column = column
+        super().__init__(f"ParserError at line {line}, column {column}: {message}")
 
 class SemanticError(CLiteError):
-    """Raised when semantic analysis fails"""
-    pass
+    """
+    Raised when semantic analysis fails (e.g., undefined variable).
+    Includes source location for precise error reporting.
+    """
+    def __init__(self, message: str, line: int, column: int):
+        self.line = line
+        self.column = column
+        super().__init__(f"SemanticError at line {line}, column {column}: {message}")
