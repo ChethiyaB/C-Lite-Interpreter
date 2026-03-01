@@ -1,13 +1,20 @@
+(* ================================================================
+   C-Lite Language Grammar Specification
+   CO523 Programming Languages - Project Specification §3
+   Aligned with Week 2: Syntax and Semantics (BNF/EBNF, Parse Trees)
+   ================================================================ *)
+
 (* ==================== PROGRAM STRUCTURE ==================== *)
-program         = { declaration | statement } ;
 (* A program is a sequence of declarations and statements *)
+program         = { declaration | statement } ;
 
 (* ==================== DECLARATIONS ==================== *)
+(* Variables must be declared before use (Project Spec §3) *)
 declaration     = type_specifier identifier ";" ;
 type_specifier  = "int" | "float" ;
-(* Variables must be declared before use *)
 
 (* ==================== STATEMENTS ==================== *)
+(* Sequential control structures and conditional logic *)
 statement       = assignment
                 | if_statement
                 | printf_call
@@ -16,37 +23,53 @@ statement       = assignment
 
 assignment      = identifier "=" expression ";" ;
 
+(* if-else with dangling else resolution: else binds to nearest if *)
 if_statement    = "if" "(" expression ")" statement
                 [ "else" statement ] ;
-(* Note: Dangling else ambiguity resolved by associating else with nearest if *)
 
+(* Block introduces new scope for variable lifetime management *)
 block           = "{" { statement } "}" ;
-(* Block introduces a new scope - critical for symbol table implementation *)
 
+(* Built-in printf() function for output (Project Spec §3) *)
 printf_call     = "printf" "(" expression ")" ";" ;
 
 (* ==================== EXPRESSIONS ==================== *)
+(* Expression hierarchy enforces operator precedence *)
+(* Project Spec §3: Arithmetic (+,-,*,/) and Comparison (>,<,==) *)
+
 expression      = relational_expression ;
+
+(* Level 4: Relational operators (lowest precedence in expressions) *)
 relational_expression = additive_expression 
                       [ ( ">" | "<" | "==" ) additive_expression ] ;
+
+(* Level 3: Additive operators *)
 additive_expression   = multiplicative_expression 
                       { ( "+" | "-" ) multiplicative_expression } ;
+
+(* Level 2: Multiplicative operators (higher precedence) *)
 multiplicative_expression = primary_expression 
                           { ( "*" | "/" ) primary_expression } ;
+
+(* Level 1: Primary expressions (highest precedence) *)
 primary_expression    = number
                       | identifier
                       | "(" expression ")"
                       | unary_expression ;
 
-unary_expression      = ( "+" | "-" ) primary_expression ;
 (* Unary operators for expressions like -x or +5 *)
+unary_expression      = ( "+" | "-" ) primary_expression ;
 
 (* ==================== TERMINALS ==================== *)
-identifier      = letter { letter | digit } ;
+(* Lexical tokens from Phase 1 (Lexer) *)
+
 number          = integer_literal | float_literal ;
 integer_literal = digit { digit } ;
 float_literal   = digit { digit } "." digit { digit }
-                | digit { digit } "." ;
+                | digit { digit } "."
+                | "." digit { digit } ;
+
+identifier      = letter { letter | digit } ;
 letter          = "a" | "b" | ... | "z" | "A" | "B" | ... | "Z" | "_" ;
 digit           = "0" | "1" | ... | "9" ;
 
@@ -54,3 +77,23 @@ digit           = "0" | "1" | ... | "9" ;
 keyword         = "int" | "float" | "if" | "else" | "printf" ;
 operator        = "+" | "-" | "*" | "/" | "=" | ">" | "<" | "==" ;
 delimiter       = "(" | ")" | "{" | "}" | ";" ;
+
+(* ==================== GRAMMAR PROPERTIES ==================== *)
+(* 
+   LL(1) Compatibility:
+   - No left-recursion (eliminated via expression hierarchy)
+   - FIRST/FOLLOW sets are disjoint for all productions
+   - Suitable for recursive descent parsing (Week 3)
+   
+   Operator Precedence (highest to lowest):
+   1. ()        - Parentheses
+   2. Unary +,- - Unary operators
+   3. *,/       - Multiplicative
+   4. +,-       - Additive
+   5. >,<,==    - Relational
+   6. =         - Assignment (statement level)
+   
+   Associativity:
+   - All binary operators: left-associative
+   - Unary operators: right-associative
+*)
