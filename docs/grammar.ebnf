@@ -1,0 +1,56 @@
+(* ==================== PROGRAM STRUCTURE ==================== *)
+program         = { declaration | statement } ;
+(* A program is a sequence of declarations and statements *)
+
+(* ==================== DECLARATIONS ==================== *)
+declaration     = type_specifier identifier ";" ;
+type_specifier  = "int" | "float" ;
+(* Variables must be declared before use *)
+
+(* ==================== STATEMENTS ==================== *)
+statement       = assignment
+                | if_statement
+                | printf_call
+                | block
+                | ";" ;  (* empty statement *)
+
+assignment      = identifier "=" expression ";" ;
+
+if_statement    = "if" "(" expression ")" statement
+                [ "else" statement ] ;
+(* Note: Dangling else ambiguity resolved by associating else with nearest if *)
+
+block           = "{" { statement } "}" ;
+(* Block introduces a new scope - critical for symbol table implementation *)
+
+printf_call     = "printf" "(" expression ")" ";" ;
+
+(* ==================== EXPRESSIONS ==================== *)
+expression      = relational_expression ;
+relational_expression = additive_expression 
+                      [ ( ">" | "<" | "==" ) additive_expression ] ;
+additive_expression   = multiplicative_expression 
+                      { ( "+" | "-" ) multiplicative_expression } ;
+multiplicative_expression = primary_expression 
+                          { ( "*" | "/" ) primary_expression } ;
+primary_expression    = number
+                      | identifier
+                      | "(" expression ")"
+                      | unary_expression ;
+
+unary_expression      = ( "+" | "-" ) primary_expression ;
+(* Unary operators for expressions like -x or +5 *)
+
+(* ==================== TERMINALS ==================== *)
+identifier      = letter { letter | digit } ;
+number          = integer_literal | float_literal ;
+integer_literal = digit { digit } ;
+float_literal   = digit { digit } "." digit { digit }
+                | digit { digit } "." ;
+letter          = "a" | "b" | ... | "z" | "A" | "B" | ... | "Z" | "_" ;
+digit           = "0" | "1" | ... | "9" ;
+
+(* ==================== KEYWORDS & SYMBOLS ==================== *)
+keyword         = "int" | "float" | "if" | "else" | "printf" ;
+operator        = "+" | "-" | "*" | "/" | "=" | ">" | "<" | "==" ;
+delimiter       = "(" | ")" | "{" | "}" | ";" ;
