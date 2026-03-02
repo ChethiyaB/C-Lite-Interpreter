@@ -1,20 +1,16 @@
-<p align="center">
-  <strong>C-Lite Interpreter</strong>
-</p>
+# C-Lite Interpreter
 
-<p align="center">
-  A tree-walking interpreter for <strong>C-Lite</strong>, a pedagogical subset of the C programming language.<br>
-  Built from scratch in Python &mdash; lexer, parser, AST, symbol table, and evaluator &mdash; with no external runtime dependencies.
-</p>
+![Version](https://img.shields.io/badge/version-0.4.0-blue)
+![Python](https://img.shields.io/badge/python-%3E%3D3.8-3776AB?logo=python&logoColor=white)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Tests](https://img.shields.io/badge/tests-293%20passing-brightgreen)
+![Status](https://img.shields.io/badge/status-active-success)
+![Course](https://img.shields.io/badge/course-CO523-orange)
 
-<p align="center">
-  <a href="#quick-start">Quick Start</a> &bull;
-  <a href="#language-reference">Language Reference</a> &bull;
-  <a href="#architecture">Architecture</a> &bull;
-  <a href="#testing">Testing</a> &bull;
-  <a href="#contributing">Contributing</a> &bull;
-  <a href="#license">License</a>
-</p>
+A tree-walking interpreter for **C-Lite**, a pedagogical subset of the C programming language.  
+Built from scratch in Python -- lexer, parser, AST, symbol table, and evaluator -- with no external runtime dependencies.
+
+[Quick Start](#quick-start) | [Language Reference](#language-reference) | [Architecture](#architecture) | [Testing](#testing) | [Contributing](#contributing) | [License](#license)
 
 ---
 
@@ -38,9 +34,9 @@
   - [Formal Grammar (EBNF)](#formal-grammar-ebnf)
 - [Architecture](#architecture)
   - [Pipeline Overview](#pipeline-overview)
-  - [Phase 1 &mdash; Lexical Analysis](#phase-1--lexical-analysis)
-  - [Phase 2 &mdash; Syntax Analysis](#phase-2--syntax-analysis)
-  - [Phase 3 &mdash; Semantic Evaluation](#phase-3--semantic-evaluation)
+  - [Phase 1 -- Lexical Analysis](#phase-1----lexical-analysis-1)
+  - [Phase 2 -- Syntax Analysis](#phase-2----syntax-analysis-1)
+  - [Phase 3 -- Semantic Evaluation](#phase-3----semantic-evaluation-1)
   - [Error Hierarchy](#error-hierarchy)
   - [AST Node Reference](#ast-node-reference)
   - [Token Type Reference](#token-type-reference)
@@ -65,7 +61,7 @@
 
 ## Overview
 
-**C-Lite** is a simplified, statically-typed subset of C designed to demonstrate the full program translation pipeline &mdash; from raw source text to evaluated output &mdash; without the complexity of a production C compiler.
+**C-Lite** is a simplified, statically-typed subset of C designed to demonstrate the full program translation pipeline -- from raw source text to evaluated output -- without the complexity of a production C compiler.
 
 The interpreter implements three classical compilation phases:
 
@@ -77,12 +73,12 @@ The interpreter implements three classical compilation phases:
 
 ### Key Features
 
-- **Zero external runtime dependencies** &mdash; only the Python 3.8+ standard library
-- **Three-phase pipeline** &mdash; lexer, parser, and tree-walking interpreter
+- **Zero external runtime dependencies** -- only the Python 3.8+ standard library
+- **Three-phase pipeline** -- lexer, parser, and tree-walking interpreter
 - **LL(1) recursive-descent parser** with formal EBNF grammar
 - **Visitor-pattern AST evaluation** with type-checked symbol table
 - **Nested block scoping** with variable shadowing and lifetime management
-- **Implicit type coercion** following C semantics (`int` &harr; `float`)
+- **Implicit type coercion** following C semantics (`int` <-> `float`)
 - **Precise error reporting** with line/column source locations
 - **Interactive REPL** with multi-line input, state inspection, and history
 - **293 passing tests** across 7 test modules covering all interpreter phases
@@ -95,7 +91,7 @@ The interpreter implements three classical compilation phases:
 
 | Requirement | Version |
 |-------------|---------|
-| Python | &ge; 3.8 |
+| Python | >= 3.8 |
 | pip | any |
 
 ### Installation
@@ -181,8 +177,8 @@ pi = 3.14159;
 | `/` | Division | `7 / 2` | `int` (truncated) or `float` |
 
 **Division semantics:**
-- `int / int` &rarr; integer (floor) division: `7 / 2` = `3`
-- `float / int` or `int / float` &rarr; float division: `7.0 / 2` = `3.5`
+- `int / int` -> integer (floor) division: `7 / 2` = `3`
+- `float / int` or `int / float` -> float division: `7.0 / 2` = `3.5`
 - Division by zero raises `SemanticError`
 
 #### Relational Operators
@@ -289,10 +285,10 @@ C-Lite performs **implicit type coercion** following C semantics:
 
 | Context | Rule | Example |
 |---------|------|---------|
-| `int` var &larr; `float` expr | Truncation (toward zero) | `int x; x = 3.14;` &rarr; `x == 3` |
-| `float` var &larr; `int` expr | Promotion | `float y; y = 10;` &rarr; `y == 10.0` |
-| Mixed arithmetic | Promote to `float` | `3 + 2.5` &rarr; `5.5` |
-| Mixed comparison | Promote to `float` | `3 == 3.0` &rarr; `1` (true) |
+| `int` var <- `float` expr | Truncation (toward zero) | `int x; x = 3.14;` -> `x == 3` |
+| `float` var <- `int` expr | Promotion | `float y; y = 10;` -> `y == 10.0` |
+| Mixed arithmetic | Promote to `float` | `3 + 2.5` -> `5.5` |
+| Mixed comparison | Promote to `float` | `3 == 3.0` -> `1` (true) |
 
 ### Formal Grammar (EBNF)
 
@@ -318,7 +314,7 @@ unary_expression      = ( "+" | "-" ) primary_expression ;
 ```
 
 **Grammar properties:**
-- **LL(1) compatible** &mdash; no left-recursion, disjoint FIRST/FOLLOW sets
+- **LL(1) compatible** -- no left-recursion, disjoint FIRST/FOLLOW sets
 - **Suitable for recursive-descent parsing** without backtracking
 - Complete FIRST/FOLLOW set analysis available in [`docs/first_follow_sets.md`](docs/first_follow_sets.md)
 
@@ -354,7 +350,7 @@ The interpreter processes source code through three sequential phases, each tran
  └──────────────────────────────────────────────────────────────────────┘
 ```
 
-### Phase 1 &mdash; Lexical Analysis
+### Phase 1 -- Lexical Analysis
 
 **Module:** `src/lexer.py`
 
@@ -380,11 +376,11 @@ Tokens: [
 - Infinite-loop guard to prevent runaway scanning
 - Escape sequence support in string literals (`\n`, `\t`, `\"`, `\\`)
 
-### Phase 2 &mdash; Syntax Analysis
+### Phase 2 -- Syntax Analysis
 
 **Module:** `src/parser.py`
 
-The parser consumes the token stream and constructs an Abstract Syntax Tree (AST). It uses **LL(1) recursive descent** &mdash; each grammar production is implemented as a method.
+The parser consumes the token stream and constructs an Abstract Syntax Tree (AST). It uses **LL(1) recursive descent** -- each grammar production is implemented as a method.
 
 ```
 Source: "x = 3 + 4 * 5;"
@@ -405,7 +401,7 @@ AST:
 - Operator precedence enforced through grammar stratification (4 levels)
 - Immutable `@dataclass(frozen=True)` AST nodes
 
-### Phase 3 &mdash; Semantic Evaluation
+### Phase 3 -- Semantic Evaluation
 
 **Module:** `src/interpreter.py`
 
@@ -594,10 +590,10 @@ Launch the REPL with `python repl.py`:
 | `:exit` / `:quit` | Exit REPL (also `Ctrl+D`) |
 
 **REPL features:**
-- **Multi-line input** &mdash; automatically detects unclosed braces/parentheses and waits for continuation
-- **State persistence** &mdash; variables declared in one command are available in subsequent commands
-- **Output isolation** &mdash; each command shows only its own `printf` output
-- **Error recovery** &mdash; errors do not terminate the session; type the next command to continue
+- **Multi-line input** -- automatically detects unclosed braces/parentheses and waits for continuation
+- **State persistence** -- variables declared in one command are available in subsequent commands
+- **Output isolation** -- each command shows only its own `printf` output
+- **Error recovery** -- errors do not terminate the session; type the next command to continue
 
 **Example session:**
 
@@ -796,7 +792,7 @@ python -m pytest --tb=short -q
 | `test_parser.py` | 64 | Syntax error detection, deep nesting, float edge cases, AST structural validation, recovery behavior, operator precedence, fuzzing, EOF edge cases, performance |
 | `test_interpreter.py` | 46 | Boolean semantics, relational evaluation, type coercion, uninitialized variables, nested blocks, expression stress, control flow, printf ordering, division edge cases, variable lifetime, isolation |
 | `test_ast.py` | 57 | Expression tree composition, block scope nesting, if-statement traversal, visitor contract, equality comparison, immutability, program node edge cases, location integrity |
-| `test_symbol_table.py` | 38 | Type enforcement, variable shadowing, deep nesting (50&ndash;200 levels), scope re-entrancy, memory integrity, error messages, performance (10,000 declarations), float precision |
+| `test_symbol_table.py` | 38 | Type enforcement, variable shadowing, deep nesting (50-200 levels), scope re-entrancy, memory integrity, error messages, performance (10,000 declarations), float precision |
 | `test_cli.py` | 24 | File execution, inline code, verbose mode, error reporting, file encoding, version flag, edge cases |
 | `test_repl.py` | 31 | Statement execution, multi-line input, state persistence, REPL commands, error recovery, output isolation |
 | **Total** | **293** | **All passing** |
@@ -831,11 +827,11 @@ The test suite systematically covers the following categories:
 - Boolean semantics (C-style truthiness: `0`, `0.0` = false)
 - Relational/equality evaluation (return `1`/`0` as `int`)
 - Mixed-type comparisons (int vs. float coercion)
-- Type assignment violations (float&rarr;int truncation, int&rarr;float promotion)
+- Type assignment violations (float->int truncation, int->float promotion)
 - Uninitialized variable detection
 - State integrity after exceptions
-- Deep nested block execution (50&ndash;100 levels)
-- Large expression stress (100&ndash;1000 term chains)
+- Deep nested block execution (50-100 levels)
+- Large expression stress (100-1000 term chains)
 - Sequential control flow integrity
 - Printf ordering guarantee
 - Division edge cases (int/int, float/int, division by zero)
@@ -857,7 +853,7 @@ The project documents **18 design decisions** in [`docs/design_decisions.md`](do
 | 7 | Interpretation pattern | Visitor pattern | Separates traversal from execution, extensible |
 | 8 | Symbol table structure | Stack of scope dictionaries | Efficient enter/exit, matches block scoping |
 | 9 | Truthiness | C-style (0 = false) | Matches C semantics |
-| 10 | Type coercion | Implicit (int&harr;float) | Matches C semantics for assignment and arithmetic |
+| 10 | Type coercion | Implicit (int<->float) | Matches C semantics for assignment and arithmetic |
 | 11 | Uninitialized variables | Raise SemanticError | Prevents undefined behavior (stricter than C) |
 | 12 | Integer division | Floor division for int/int | Matches C semantics |
 | 13 | Error strategy | Fail-fast (first error only) | Simpler implementation, standard for educational compilers |
@@ -890,7 +886,7 @@ The project documents **18 design decisions** in [`docs/design_decisions.md`](do
 **Benchmarks (tested on the project test suite):**
 - 1,000-term expression chain: parses and evaluates in < 15 seconds
 - 10,000 variable declarations: symbol table handles in < 2 seconds
-- 50&ndash;200 levels of nested scopes: no stack overflow, completes in milliseconds
+- 50-200 levels of nested scopes: no stack overflow, completes in milliseconds
 - Full 293-test suite: completes in ~2.5 seconds
 
 ---
@@ -901,7 +897,7 @@ Contributions are welcome. Please follow these guidelines:
 
 1. **Fork** the repository and create a feature branch.
 2. **Write tests** for any new functionality (maintain 100% test pass rate).
-3. **Follow existing code style** &mdash; type hints, docstrings, consistent naming.
+3. **Follow existing code style** -- type hints, docstrings, consistent naming.
 4. **Run the full test suite** before submitting:
    ```bash
    python -m pytest -v
@@ -932,8 +928,8 @@ Copyright (c) 2026 Chethiya Bandara
 
 ## Acknowledgements
 
-- **Course:** CO523 &mdash; Programming Languages, Department of Computer Engineering, University of Peradeniya
-- **Semester:** Semester 7, 2025&ndash;2026
+- **Course:** CO523 -- Programming Languages, Department of Computer Engineering, University of Peradeniya
+- **Semester:** Semester 7, 2025-2026
 - **References:**
-  - Sebesta, R.W. &mdash; *Concepts of Programming Languages* (12th Edition)
-  - Scott, M.L. &mdash; *Programming Language Pragmatics* (4th Edition)
+  - Sebesta, R.W. -- *Concepts of Programming Languages* (12th Edition)
+  - Scott, M.L. -- *Programming Language Pragmatics* (4th Edition)
