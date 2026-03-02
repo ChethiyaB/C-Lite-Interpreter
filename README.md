@@ -8,7 +8,7 @@
 ![Course](https://img.shields.io/badge/course-CO523-orange)
 
 A tree-walking interpreter for **C-Lite**, a pedagogical subset of the C programming language.  
-Built from scratch in Python -- lexer, parser, AST, symbol table, and evaluator -- with no external runtime dependencies.
+Built from scratch in Python - lexer, parser, AST, symbol table, and evaluator - with no external runtime dependencies.
 
 [Quick Start](#quick-start) | [Language Reference](#language-reference) | [Architecture](#architecture) | [Testing](#testing) | [Contributing](#contributing) | [License](#license)
 
@@ -34,9 +34,9 @@ Built from scratch in Python -- lexer, parser, AST, symbol table, and evaluator 
   - [Formal Grammar (EBNF)](#formal-grammar-ebnf)
 - [Architecture](#architecture)
   - [Pipeline Overview](#pipeline-overview)
-  - [Phase 1 -- Lexical Analysis](#phase-1----lexical-analysis-1)
-  - [Phase 2 -- Syntax Analysis](#phase-2----syntax-analysis-1)
-  - [Phase 3 -- Semantic Evaluation](#phase-3----semantic-evaluation-1)
+  - [Phase 1 -- Lexical Analysis](#phase-1----lexical-analysis)
+  - [Phase 2 -- Syntax Analysis](#phase-2----syntax-analysis)
+  - [Phase 3 -- Semantic Evaluation](#phase-3----semantic-evaluation)
   - [Error Hierarchy](#error-hierarchy)
   - [AST Node Reference](#ast-node-reference)
   - [Token Type Reference](#token-type-reference)
@@ -55,13 +55,11 @@ Built from scratch in Python -- lexer, parser, AST, symbol table, and evaluator 
 - [Performance](#performance)
 - [Contributing](#contributing)
 - [License](#license)
-- [Acknowledgements](#acknowledgements)
-
 ---
 
 ## Overview
 
-**C-Lite** is a simplified, statically-typed subset of C designed to demonstrate the full program translation pipeline -- from raw source text to evaluated output -- without the complexity of a production C compiler.
+**C-Lite** is a simplified, statically-typed subset of C designed to demonstrate the full program translation pipeline from raw source text to evaluated output without the complexity of a production C compiler.
 
 The interpreter implements three classical compilation phases:
 
@@ -73,8 +71,8 @@ The interpreter implements three classical compilation phases:
 
 ### Key Features
 
-- **Zero external runtime dependencies** -- only the Python 3.8+ standard library
-- **Three-phase pipeline** -- lexer, parser, and tree-walking interpreter
+- **Zero external runtime dependencies** - only the Python 3.8+ standard library
+- **Three-phase pipeline** - lexer, parser, and tree-walking interpreter
 - **LL(1) recursive-descent parser** with formal EBNF grammar
 - **Visitor-pattern AST evaluation** with type-checked symbol table
 - **Nested block scoping** with variable shadowing and lifetime management
@@ -326,29 +324,9 @@ unary_expression      = ( "+" | "-" ) primary_expression ;
 
 The interpreter processes source code through three sequential phases, each transforming the input into a progressively higher-level representation:
 
-```
-                         C-Lite Interpreter Pipeline
- ┌──────────────────────────────────────────────────────────────────────┐
- │                                                                      │
- │   Source Code          Token Stream            AST            Output  │
- │   ──────────           ────────────         ────────          ──────  │
- │                                                                      │
- │   ┌─────────┐   lex   ┌──────────┐  parse  ┌──────────┐  eval  ┌──┐ │
- │   │  .clt   │───────▶ │  Token[] │────────▶│ Program  │──────▶│IO│ │
- │   │  file   │         │          │         │  (AST)   │       │  │ │
- │   └─────────┘         └──────────┘         └──────────┘       └──┘ │
- │                                                  │                   │
- │        Phase 1              Phase 2              │     Phase 3       │
- │     Lexical Analysis     Syntax Analysis         │  Semantic Eval    │
- │     (src/lexer.py)       (src/parser.py)         │ (src/interpreter  │
- │                                                  │       .py)        │
- │                                              ┌───┴───┐               │
- │                                              │Symbol │               │
- │                                              │ Table │               │
- │                                              └───────┘               │
- │                                          (src/symbol_table.py)       │
- └──────────────────────────────────────────────────────────────────────┘
-```
+
+![Pipeline](docs/C-Lite_Interpreter_Pipeline.png)
+
 
 ### Phase 1 -- Lexical Analysis
 
@@ -380,7 +358,7 @@ Tokens: [
 
 **Module:** `src/parser.py`
 
-The parser consumes the token stream and constructs an Abstract Syntax Tree (AST). It uses **LL(1) recursive descent** -- each grammar production is implemented as a method.
+The parser consumes the token stream and constructs an Abstract Syntax Tree (AST). It uses **LL(1) recursive descent** - each grammar production is implemented as a method.
 
 ```
 Source: "x = 3 + 4 * 5;"
@@ -924,12 +902,6 @@ MIT License
 Copyright (c) 2026 Chethiya Bandara
 ```
 
----
-
-## Acknowledgements
-
-- **Course:** CO523 -- Programming Languages, Department of Computer Engineering, University of Peradeniya
-- **Semester:** Semester 7, 2025-2026
 - **References:**
   - Sebesta, R.W. -- *Concepts of Programming Languages* (12th Edition)
   - Scott, M.L. -- *Programming Language Pragmatics* (4th Edition)
